@@ -8,7 +8,7 @@ function observeZonaOneInsertion() {
     }
   });
 }
-const blokOne = {
+const blokObservZon = {
   item: [],
 };
 
@@ -79,9 +79,6 @@ function renderDragDrop(users) {
 //   }
 
 // }
-
-
-// 
 
 function renderTable(users) {
 
