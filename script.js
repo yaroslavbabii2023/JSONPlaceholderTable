@@ -1,19 +1,6 @@
-function observeZonaOneInsertion() {
-  const zonaOne = document.querySelector('.zona-1');
-  zonaOne.addEventListener('DOMNodeInserted', (event) => {
-    if (event.target.getAttribute('draggable') === 'true') {
-      const selectColumn = event.target.id
-      console.log(selectColumn)
-      blokOne.item.push(selectColumn)
-    }
-  });
-}
-const blokOne = {
-  item: [],
-};
+  let newSelectColumns = ['name','username','company','email'];
 
-
-function renderDragDrop(users) {
+function renderDragDrop(users) {  
   const $dropContainer = document.querySelector('.drop-container');
 
   const $zonaOne = document.createElement('div');
@@ -21,8 +8,7 @@ function renderDragDrop(users) {
 
   const $zonaTwo = document.createElement('div');
   $zonaTwo.classList.add("zona-2");
-
-
+  
   const keys = Object.keys(users[0]);
   keys.forEach(key => {
     const $item = document.createElement('div');
@@ -44,54 +30,16 @@ function renderDragDrop(users) {
   $dropContainer.addEventListener('drop', (event) => {
     const itemId = event.dataTransfer.getData('id');
     event.target.appendChild(document.getElementById(itemId));
+    newSelectColumns.push(itemId)
   });
-}
 
-  // const keys = Object.keys(users[0])
-  // keys.forEach(key => {
-  //   const $item = document.createElement('div');
-  //   $item.id = key
-  //   $item.innerHTML = key
-  //   $item.setAttribute('draggable', 'true')
-
-  //   $zonaTwo.appendChild($item)
-  //   $dropContainer.append($zonaOne, $zonaTwo)
-
-  //   $zonaOne.ondragover = allowDrop;
-  //   $zonaTwo.ondragover = allowDrop;
-
-  //   $zonaOne.ondrop = drop;
-  //   $zonaTwo.ondrop = drop;
-
-  //   $item.ondragstart = drag;
-
-  // })
-
-//   function allowDrop(event) {
-//     event.preventDefault()
-//   }
-//   function drag(event) {
-//     event.dataTransfer.setData('id', event.target.id)
-//   }
-//   function drop(event) {
-//     let itemId = event.dataTransfer.getData('id');
-//     event.target.append(document.getElementById(itemId))
-//   }
-
-// }
-
-
-// 
+  }
 
 function renderTable(users) {
-
-  const keyUsers = Object.keys(users[0])
-  let selectColumns = [...keyUsers]
-
   const table = document.createElement("table");
   const headerRow = table.insertRow();
-
-  for (let field of selectColumns) {
+  
+  for (let field of newSelectColumns) {
     const headerCell = document.createElement("th");
     headerCell.innerHTML = field;
     headerRow.appendChild(headerCell);
@@ -101,7 +49,7 @@ function renderTable(users) {
 
   users.forEach(function (rowData) {
     const row = body.insertRow();
-    selectColumns.forEach(function (field) {
+    newSelectColumns.forEach(function (field) {
       const cell = row.insertCell();
       cell.innerHTML = rowData[field];
 
@@ -113,13 +61,32 @@ function renderTable(users) {
       }
     });
   });
+
   document.body.appendChild(table);
+
 }
+
+function buttonHandler(users) {
+  const $dropContainer = document.querySelector('.drop-container')
+  const $dragButton = document.createElement('button');
+  $dragButton.classList.add('drag-button');
+  $dragButton.addEventListener('click', buttonHandler)
+  $dragButton.innerHTML = 'Apply'
+  $dropContainer.appendChild($dragButton)
+
+  function buttonHandler () {
+    const table = document.querySelector('table')
+    table.remove()
+    renderTable(users)
+  }
+}
+
 
 fetch('https://jsonplaceholder.typicode.com/users')
   .then(response => response.json())
   .then(users => {
     renderTable(users);
     renderDragDrop(users);
-    observeZonaOneInsertion()
+    buttonHandler(users)
+    newSelectColumns = [];
   });
