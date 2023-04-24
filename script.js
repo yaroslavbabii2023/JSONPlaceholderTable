@@ -1,3 +1,5 @@
+  let newSelectColumns = ['name','username','company','email'];
+
 function renderDragDrop(users) {  
   const $dropContainer = document.querySelector('.drop-container');
 
@@ -28,15 +30,10 @@ function renderDragDrop(users) {
   $dropContainer.addEventListener('drop', (event) => {
     const itemId = event.dataTransfer.getData('id');
     event.target.appendChild(document.getElementById(itemId));
+    newSelectColumns.push(itemId)
   });
 
   }
-
-  
-
-
-  let newSelectColumns = ['name','username','company',];
-  console.log(newSelectColumns)
 
 function renderTable(users) {
   const table = document.createElement("table");
@@ -67,12 +64,6 @@ function renderTable(users) {
 
   document.body.appendChild(table);
 
-  const $dropContainer = document.querySelector('.drop-container');
-  $dropContainer.addEventListener('drop', (event) => {
-    const itemId = event.dataTransfer.getData('id'); 
-    newSelectColumns.push(itemId)
-  })
-  
 }
 
 function buttonHandler(users) {
@@ -97,5 +88,5 @@ fetch('https://jsonplaceholder.typicode.com/users')
     renderTable(users);
     renderDragDrop(users);
     buttonHandler(users)
-
+    newSelectColumns = [];
   });
