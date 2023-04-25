@@ -26,15 +26,16 @@ table {
     margin: 50px auto;
 }
 
-button {
+/* button {
     margin-bottom: 20px;
-}
+} */
 
  .drop-container {
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
+    overflow: auto;
  }
 
 .zona-1 {

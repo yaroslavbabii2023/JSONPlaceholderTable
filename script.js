@@ -1,8 +1,8 @@
-  let newSelectColumns = ['name','username','company','email'];
+let newSelectColumns = ['name', 'username', 'company', 'email'];
+const $dropContainer = document.querySelector('.drop-container');
 
-function renderDragDrop(users) {  
-  const $dropContainer = document.querySelector('.drop-container');
 
+function renderDragDrop(users) {
   const $zonaOne = document.createElement('div');
   $zonaOne.classList.add("zona-1");
 
@@ -12,15 +12,29 @@ function renderDragDrop(users) {
   const keys = Object.keys(users[0]);
   keys.forEach(key => {
     const $item = document.createElement('div');
+
+    const $buttonItem = document.createElement('button')
+    $buttonItem.id = "button-item"
+    $buttonItem.innerHTML = "Delete"
+
     $item.id = key;
     $item.innerHTML = key;
     $item.draggable = true;
     $item.ondragstart = event => {
       event.dataTransfer.setData('id', event.target.id)
     };
-      $zonaTwo.appendChild($item);
-  });
-  
+
+    $item.appendChild($buttonItem)
+    $zonaTwo.appendChild($item);
+
+    $buttonItem.addEventListener('click', handlerButtonItem)});
+    function handlerButtonItem(el){
+      const itemId = this.parentNode.id
+      newSelectColumns.push(itemId)
+      $zonaOne.insertAdjacentHTML('beforeend', `<div id="${itemId}" draggable="true">${itemId}</div>`)
+      this.parentNode.remove(this)
+    }
+
   $dropContainer.append($zonaOne, $zonaTwo);
 
   $dropContainer.addEventListener('dragover', (event) => {
@@ -33,12 +47,13 @@ function renderDragDrop(users) {
     newSelectColumns.push(itemId)
   });
 
-  }
+
+}
 
 function renderTable(users) {
   const table = document.createElement("table");
   const headerRow = table.insertRow();
-  
+
   for (let field of newSelectColumns) {
     const headerCell = document.createElement("th");
     headerCell.innerHTML = field;
@@ -61,25 +76,23 @@ function renderTable(users) {
       }
     });
   });
-
   document.body.appendChild(table);
-
 }
 
 function buttonHandler(users) {
-  const $dropContainer = document.querySelector('.drop-container')
   const $dragButton = document.createElement('button');
-  $dragButton.classList.add('drag-button');
+  $dragButton.classList.add()
   $dragButton.addEventListener('click', buttonHandler)
   $dragButton.innerHTML = 'Apply'
   $dropContainer.appendChild($dragButton)
 
-  function buttonHandler () {
+  function buttonHandler() {
     const table = document.querySelector('table')
     table.remove()
     renderTable(users)
   }
 }
+
 
 
 fetch('https://jsonplaceholder.typicode.com/users')
